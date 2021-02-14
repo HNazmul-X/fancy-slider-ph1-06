@@ -58,7 +58,7 @@
 
 #learge-preview{
   width:400px;
-  height:400px;
+  height:auto;
   background: pink;
   position: fixed;
   z-index: 10000;
@@ -81,6 +81,7 @@
   -37px 0  40px rgba(0, 0, 0, 0.15);
   border-radius:10px;
   transition: 0.3s;
+  overflow: hidden;
 
 }
 #learge-preview-img{
@@ -108,10 +109,11 @@
   0 -41.8px 33.4px rgba(0, 0, 0, 0.05),
   0 -100px 80px rgba(0, 0, 0, 0.07);
   z-index: 100;
+  pointer-events: none;
 
 }
 .selected-image-box{
-  height:100%;
+  height:auto;
   width:100px;
   background: white;
   margin-left:10px;
@@ -125,7 +127,20 @@
   overflow: hidden;
 
 }
+#seleted-image-count{
+  position: fixed;
+  top:10px;
+  left:10px;
+  background:pink;
+  padding:20px;
+  border-radius: 50%;
 
+}
+.selected-image-box img{
+  width: 100%;
+  object-fit: fill;
+  height: 100%;
+}
 @media (max-width: 767px) {
   .justify-content-around.align-items-center.mt-3.gallery-header.mb-2 {
     flex-direction: column;

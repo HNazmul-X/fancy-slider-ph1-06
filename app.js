@@ -4,22 +4,31 @@ const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
+const previewBox = document.querySelector('#learge-preview');
 // selected image 
 let sliders = [];
+
+
+
+
+
 
 // If this key doesn't work
 // Find the name in the url and go to their website
 // to create your own api key
 const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
-// show images 
+
+/* -------------------------------------------------------------
+              Image Show funtion heree                        
+----------------------------------------------------------------- */
 const showImages = (images) => {
-  // console.log(images.length);
   if(images.length > 0){
     imagesArea.style.display = "block";
     gallery.innerHTML = "";
     // show gallery title
     galleryHeader.style.display = "flex";
+    spinnerToggle("#spinner");
     images.forEach((image) => {
          let div = document.createElement("div");
          div.className = "col-lg-2 col-md-2 col-xs-2 img-item mb-2";
@@ -32,20 +41,13 @@ const showImages = (images) => {
     <h1 class="text-center">Sorry we didn't find any item</h1>
     `
   }
-  
-
 }
 
 
 
-
-
-
-
-
-
-
-
+/* -------------------------------------------------------------
+              API Caller Funtion here                         
+----------------------------------------------------------------- */
 
 const getImages = (query) => {
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
@@ -58,18 +60,10 @@ const getImages = (query) => {
 }
 
 
-// live oreview  funtion 
 
-
-
-
-
-
-
-
-
-
-
+/* -------------------------------------------------------------
+             New item Or Get selected item funtion here                       
+----------------------------------------------------------------- */
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
@@ -79,15 +73,19 @@ const selectItem = (event, img) => {
   if (item === -1) {
     sliders.push(img);
     selectedImagePreview();
+    selectedImageCount()
   } else {
     let newSlider = sliders.filter( image => image !== img)
     sliders = newSlider;
     selectedImagePreview ();
+    selectedImageCount()
   }
-  console.log(sliders);
 }
 
-/* image showing on the preview */
+
+/* -------------------------------------------------------------
+              Image show on preview box funtion                         
+----------------------------------------------------------------- */
 const selectedImagePreview = () => {
   const selectedImageContainer = document.getElementById("selected-image-preview");
   selectedImageContainer.innerHTML = ""
@@ -103,9 +101,27 @@ const selectedImagePreview = () => {
     <img style="width:100%" src="${image}"/>
     `;
          selectedImageContainer.appendChild(div);
+
     });
   }
 }
+
+
+/* -------------------------------------------------------------
+              image select counter here                         
+----------------------------------------------------------------- */
+const selectedImageCount = () => {
+  const displayCount = document.querySelector("#seleted-image-count");
+  if(sliders.length < 1){
+    displayCount.style.display = "none"
+  }
+  else{
+    displayCount.style.display ="block"
+    displayCount.innerText = sliders.length;
+    console.log(displayCount);
+  }
+}
+selectedImageCount();
 
 
 
@@ -187,6 +203,7 @@ const changeSlide = (index) => {
 
 searchBtn.addEventListener('click', function () {
   document.querySelector('.main').style.display = 'none';
+  spinnerToggle("#spinner");
   clearInterval(timer);
   const search = document.getElementById('search');
   getImages(search.value)
@@ -202,16 +219,31 @@ document.querySelector('#search').addEventListener("keydown", (e) => {
 
 sliderBtn.addEventListener('click', function () {
   createSlider()
+  document.querySelector("#selected-image-preview").style.display = "none"
+
 })
 
 
 
-// image preview funtion
-document.querySelector("#learge-preview").style.display = "none"
+/* -------------------------------------------------------------
+              Image preview funtion here                         
+----------------------------------------------------------------- */
+previewBox.style.display = "none"
 const  ShowPreviewImage = (image)=>{
   document.querySelector("#learge-preview-img").src = image
-  document.querySelector("#learge-preview").style.display = "block"
+  previewBox.style.display = "block"
 }
 const stopPreview = () => {
-  document.querySelector("#learge-preview").style.display = "none"
+  previewBox.style.display = "none"
+}
+
+
+
+
+/* -------------------------------------------------------------
+             spinner Toggle funtion here                         
+----------------------------------------------------------------- */
+const spinnerToggle = (spinnerID) => {
+  const spinner = document.querySelector(spinnerID);
+  spinner.classList.toggle("d-none")
 }
